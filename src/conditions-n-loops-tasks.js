@@ -445,8 +445,28 @@ function rotateMatrix(matrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const arr1 = arr[0];
+  const arr2 = [];
+  const arr3 = [];
+  if (arr.length <= 1) {
+    return arr;
+  }
+  for (let i = 1; i < arr.length; i += 1) {
+    if (arr[i] < arr1) {
+      arr2[arr2.length] = arr[i];
+    } else {
+      arr3[arr3.length] = arr[i];
+    }
+  }
+  const sortArr2 = sortByAsc(arr2);
+  const sortArr3 = sortByAsc(arr3);
+  const newArr = arr;
+  const res = [...sortArr2, arr1, ...sortArr3];
+  for (let i = 0; i < res.length; i += 1) {
+    newArr[i] = res[i];
+  }
+  return newArr;
 }
 
 /**
@@ -466,8 +486,31 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let shuffleCount = 0;
+  let shuffledStr = str;
+  function subShuffle() {
+    let evenChars = '';
+    let oddChars = '';
+    for (let i = 0; i < str.length; i += 1) {
+      if (i % 2 === 0) {
+        evenChars += shuffledStr[i];
+      } else {
+        oddChars += shuffledStr[i];
+      }
+    }
+    shuffledStr = evenChars + oddChars;
+  }
+  do {
+    subShuffle();
+    shuffleCount += 1;
+  } while (shuffledStr !== str);
+  const effectiveIterations = iterations % shuffleCount;
+  shuffledStr = str;
+  for (let i = 0; i < effectiveIterations; i += 1) {
+    subShuffle();
+  }
+  return shuffledStr;
 }
 
 /**
@@ -487,8 +530,23 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(n) {
+  const digitsArr = Array.from(String(n), Number);
+  let i = digitsArr.length - 2;
+  while (i >= 0 && digitsArr[i] >= digitsArr[i + 1]) {
+    i -= 1;
+  }
+  if (i === -1) {
+    return n;
+  }
+  let j = digitsArr.length - 1;
+  while (digitsArr[j] <= digitsArr[i]) {
+    j -= 1;
+  }
+  [digitsArr[i], digitsArr[j]] = [digitsArr[j], digitsArr[i]];
+  const reversed = digitsArr.splice(i + 1).reverse();
+  digitsArr.push(...reversed);
+  return parseInt(digitsArr.join(''), 10);
 }
 
 module.exports = {
